@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="/assets/images&icon/bootstrap-icons-1.5.0/house-door.svg">
+
+  <title id="title"></title>
+
+
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+  
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/assets/css/login.css">
+
+  <div id="header"
+    class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <div class="col-sm-2">
+      <h5 class="my-0 mr-md-auto font-weight-normal">Rumah Pajar</h5>
+    </div>
+    <div class="col-sm-9">
+      <nav class="my-2 my-md-0 mr-md-3">
+
+        <a class="p-2 text-dark" href="#"><img src="/assets/images&icon/bootstrap-icons-1.5.0/currency-dollar.svg"
+            width="32" height="32" alt=""></a>
+        <a class="p-2 text-dark" href="#">Enterprise</a>
+        <a class="p-2 text-dark" href="#">Support</a>
+        <a class="p-2 text-dark" href="#">Pricing</a>
+      </nav>
+    </div>
+    <button class="btn btn-outline-primary" id="sign-in">Sign in</button>
+  </div>
+</head>
+
+<body style="background-image: url(/assets/images&icon/residential-district-wallpaper-preview.jpg);background-repeat: no-repeat;background-size: cover;">
+
+  <div class="card-form" hidden id="loginForm">
+    <div class="wrapper fadeInDown">
+      <div id="formContent">
+
+        <button class="btn btn-danger">
+          <img src="/assets/images&icon/bootstrap-icons-1.5.0/x-lg.svg" alt="">
+        </button>
+
+        <div class="fadeIn first" id="closeFormLogin">
+          <img src="/assets/images&icon/bootstrap-icons-1.5.0/house.svg" width="100" height="100" />
+        </div>
+
+
+
+        <form>
+          <input type="email" id="email" class="fadeIn second" name="email" placeholder="email">
+          <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
+          <input type="submit" class="fadeIn fourth" id="login" value="Log In">
+        </form>
+
+
+        <div id="formFooter">
+          Don't have an account?
+          <a class="underlineHover btn btn-outline-primary" href="#">Sign-Up</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="input-group rounded d-flex justify-content-center" id="mainSearch">
+    <input type="search"  placeholder="Search" />
+      <button type="submit" class="btn btn-outline-dark" ><img src="/assets/images&icon/bootstrap-icons-1.5.0/search.svg" alt=""></button>
+  </div>
+
+
+
+  <div class="alert alert-danger text-center" hidden id="alertEmail">Email not Found !!</div>
+  <div class="alert alert-danger text-center" hidden id="alertPass">Wrong Password !!</div>
+  <div class="alert alert-success text-center" hidden id="successLogin"> Welcome! </div>
+  <div class="alert alert-warning text-center" hidden id="alertNf">Not Found !!</div>
+
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+        $("#sign-in").click(function(){
+            $("#loginForm").removeAttr('hidden')
+            $("#mainSearch").attr('hidden')
+        });
+        $("#closeFormLogin").click(function(){
+          $(".cardform").hide()
+        })
+        
+    });
+
+
+
+
+    // function loadData() {
+    //   let html = ''
+    //   $.ajax({
+    //     method: "GET",
+    //     url: "http://localhost:3000/users",
+    //     dataType: "json"
+    //   }).done(data => {
+    //     data.forEach(item => {
+    //       html += ` 
+    //       <tr>
+    //         <td scope="col">${item.email}</td>
+    //         <td scope="col">${item.firstname}</td>
+    //         <td scope="col">${item.lastname}</td>
+    //       </tr>`
+    //     })
+    //     $('#tbody').html(html)
+    //   })
+    // };
+
+    $(document).ready(function(){
+        $("#loginForm").submit(function(event){
+          event.preventDefault()
+          authenticate()
+        });
+      })
+
+      function authenticate() {
+        const email = $('#email').val()
+        const password = $('#password').val()
+
+        var xmlhttp = new XMLHttpRequest();
+
+        $.ajax({
+          method: "POST",
+          url: "http://localhost:3000/users/login",
+          data: {email, password},
+        }).done(result => {
+          if(result.success){
+            let html = ``
+            localStorage.setItem("token", result.token)
+            $('#sign-in').replaceWith( html += ` <button class="btn btn-outline-primary" id="sign-in">${result.user.firstname}</button>`)
+            $('#loginForm').hide()
+          }else{
+            alert("Login Gagal")
+          }
+        })
+      }
+      
+  </script>
+</body>
+
+</html>
